@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">   
+
+<mapper namespace="cn.tedu.shopping.mapper.UserMapper">
+        <!-- 插入用戶數據 -->
+		<!-- Integer insert(User user) -->
+		<insert id="insert"
+			useGeneratedKeys="true"
+			keyProperty="uid">
+			INSERT INTO t_user (
+				username, password,
+				nickname,salt,
+				phone, email,
+				is_delete,
+                created_user, created_time,
+                modified_user, modified_time
+			) VALUES (
+				#{username}, #{password},
+				#{nickname}, #{salt},
+				#{phone}, #{email},
+				#{isDelete}, 
+				#{createdUser},#{createdTime}, 
+				#{modifiedUser},#{modifiedTime}
+			)
+		</insert>
+		
+		<!-- 更新用户基本资料 -->
+	    <!-- Integer updateInfo(User user) -->
+		<update id="updateInfo">
+			UPDATE 
+				t_user 
+			SET 
+			    <if test="nickname != null">
+				nickname=#{nickname}, 
+				</if>
+				<if test="phone != null">
+				phone=#{phone}, 
+				</if>
+				<if test="email != null">
+				email=#{email}, 
+				</if>	
+				modified_user=#{modifiedUser}, 
+				modified_time=#{modifiedTime} 
+			WHERE 
+				uid=#{uid}
+		</update>
+		
+		<!-- 更新密碼 -->
+		<!-- Integer updatePassword(
+			@Param("uid") Integer uid,
+			@Param("password") String password,
+			@Param("modifiedUser") String modifiedUser,
+			@Param("modifiedTime") Date modifiedTime); -->
+		<update id="updatePassword">
+		    UPDATE 
+		        t_user 
+		    SET
+		        password=#{password},
+		        modified_user=#{modifiedUser},
+		        modified_time=#{modifiedTime}
+		    WHERE
+		        uid=#{uid}  
+		    
+		</update>
+		
+		<!-- 根據用户名查詢用户資料 -->
+		<!-- User findByUid(Integer uid); -->
+		<select id="findByUid"
+			resultType="cn.tedu.shopping.entity.User">
+			SELECT 
+			    username, nickname,
+			    phone, email,
+			    password, salt,	
+				is_delete AS isDelete	
+			FROM 
+				t_user 
+			WHERE 
+				uid=#{uid}
+		</select>	
+		
+		<!-- 根據用户名查詢用户資料 -->
+		<!-- User findByUsername(String username); -->
+		<select id="findByUsername"
+			resultType="cn.tedu.shopping.entity.User">
+			SELECT 
+				uid, username,
+				nickname, phone,
+				email,password, 
+				salt,	
+				is_delete AS isDelete	
+			FROM 
+				t_user 
+			WHERE 
+				username=#{username}
+		</select>
+   
+   
+</mapper>
+
+
+
+
+
+
+
+
+
+
